@@ -1,4 +1,4 @@
-.search-form,
+.form,
 .load-more {
     display: flex;
     justify-content: center;
@@ -7,7 +7,7 @@
     gap: 8px;
 }
 
-.search-form input[type="text"] {
+.form input[type="text"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -15,7 +15,7 @@
     font-size: 16px;
 }
 
-.search-form button,
+.form button,
 .load-more {
     padding: 10px 20px;
     background-color: #4e4e4e;
@@ -32,7 +32,7 @@
     height: 40px;
 }
 
-.search-form button:hover,
+.form button:hover,
 .load-more:hover {
     background-color: #6c8cff;
 }
