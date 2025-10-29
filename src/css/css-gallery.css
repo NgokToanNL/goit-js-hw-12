@@ -11,7 +11,7 @@
 
 .gallery-item {
     border: 1px solid #808080;
-    width: calc((100% - 72px) / 4);
+    width: calc((100% - 72px) / 3);
     box-sizing: border-box;
     border-radius: 4px;
     overflow: hidden;

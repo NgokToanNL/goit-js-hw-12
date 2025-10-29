@@ -18,7 +18,8 @@
     }
 }
 
-.loader.is-hidden {
+.loader.is-hidden,
+.load-more.is-hidden {
     display: none;
 }
 
