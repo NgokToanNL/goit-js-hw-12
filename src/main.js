@@ -46,6 +46,8 @@ async function fetchImages(isNewSearch = true) {
 
     showLoader();
 
+    const pageToFetch = isNewSearch ? 1 : currentPage;
+
     try {
         const data = await getImagesByQuery(currentQuery, currentPage);
         const images = data.hits;
@@ -67,26 +69,28 @@ async function fetchImages(isNewSearch = true) {
 
         createGallery(images);
 
+        currentPage += 1;
+
         if (!isNewSearch) {
             smoothScroll();
         }
 
-        currentPage += 1;
-
         const totalPages = Math.ceil(totalHits / perPage);
         if (currentPage > totalPages) {
             hideLoadMoreButton();
-            iziToast.info({
-                message: 'We are sorry, but you have reached the end of search results.',
+            if (totalHits > 0) {
+                iziToast.info({
+                    message: 'We are sorry, but you have reached the end of search results.',
+                });
+            }
+            } else {
+                showLoadMoreButton();
+            }
+        } catch (error) {
+            iziToast.error({
+                title: 'HTTP Error',
+                message: `Failed to fetch images: ${error.message}`,
             });
-        } else {
-            showLoadMoreButton();
-        }
-    } catch (error) {
-        iziToast.error({
-            title: 'HTTP Error',
-            message: `Failed to fetch images: ${error.message}`,
-        });
 
         hideLoadMoreButton();
     } finally {
@@ -113,6 +117,6 @@ form.addEventListener('submit', async event => {
     form.reset();
 });
 
-loadMoreBtn.addEventListener('click', () => {
-    fetchImages(false);
+loadMoreBtn.addEventListener('click', async() => {
+    await fetchImages(false);
 });
