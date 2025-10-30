@@ -45,54 +45,52 @@ async function fetchImages(isNewSearch = true) {
     }
 
     showLoader();
-
-    const pageToFetch = isNewSearch ? 1 : currentPage;
+    hideLoadMoreButton();
 
     try {
         const data = await getImagesByQuery(currentQuery, currentPage);
         const images = data.hits;
         totalHits = data.totalHits;
+        const totalPages = Math.ceil(totalHits / perPage);
 
         if (images.length === 0 && isNewSearch) {
             iziToast.error({
                 title: 'No result',
-                message: 'Sorry, there are no images matching your search query. Pleasy, try again!',
+                message: 'Sorry, there are no images matching your search query. Please, try again!',
             });
             return;
         }
 
-        if (isNewSearch) {
+        if (isNewSearch && totalHits > 0) {
             iziToast.success({
-                message: `We founf ${totalHits} images.`,
+                message: `We found ${totalHits} images.`,
             });
         }
 
         createGallery(images);
 
-        currentPage += 1;
 
         if (!isNewSearch) {
             smoothScroll();
         }
 
-        const totalPages = Math.ceil(totalHits / perPage);
-        if (currentPage > totalPages) {
+        currentPage += 1;
+
+        if (currentPage <= totalPages) {
+            showLoadMoreButton();
+            } else {
             hideLoadMoreButton();
             if (totalHits > 0) {
                 iziToast.info({
                     message: 'We are sorry, but you have reached the end of search results.',
                 });
             }
-            } else {
-                showLoadMoreButton();
             }
         } catch (error) {
             iziToast.error({
                 title: 'HTTP Error',
                 message: `Failed to fetch images: ${error.message}`,
             });
-
-        hideLoadMoreButton();
     } finally {
         hideLoader();
     }
